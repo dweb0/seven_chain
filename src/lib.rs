@@ -6,6 +6,7 @@ use std::str::FromStr;
 pub enum Error {
     InvalidChainError,
     InvalidSpeciesError,
+    InvalidDomainError
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -27,15 +28,12 @@ impl Chain {
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Error::InvalidChainError => write!(
-                f,
-                "Invalid chain. Possible values are TRA, TRB, TRD, TRG, IGH, IGK, IGL."
-            ),
-            Error::InvalidSpeciesError => {
-                write!(f, "Invalid species. Possible values are human or mouse")
-            }
-        }
+        let s = match self {
+            Error::InvalidChainError => "Invalid chain. Possible values are TRA, TRB, TRD, TRG, IGH, IGK, IGL.",
+            Error::InvalidSpeciesError => "Invalid species. Possible values are human or mouse",
+            Error::InvalidDomainError => "Invalid domain. Possible values are V, D, J, C.",
+        };
+        write!(f, "{}", s)
     }
 }
 
@@ -107,5 +105,38 @@ impl fmt::Display for Species {
             Species::Mouse => "mouse"
         };
         write!(f, "{}", s)
+    }
+}
+
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+pub enum Domain {
+    V,
+    D,
+    J,
+    C,
+}
+
+impl fmt::Display for Domain {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let s = match *self {
+            Domain::V => "V",
+            Domain::D => "D",
+            Domain::J => "J",
+            Domain::C => "C"
+        };
+        write!(f, "{}", s)
+    }
+}
+
+impl FromStr for Domain {
+    type Err = Error;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(match s {
+            "V" => Domain::V,
+            "D" => Domain::D,
+            "J" => Domain::J,
+            "C" => Domain::C,
+            _ => return Err(Error::InvalidDomainError)
+        })
     }
 }
