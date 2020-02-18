@@ -8,7 +8,7 @@ pub enum Error {
     InvalidSpeciesError,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum Chain {
     TRA,
     TRB,
@@ -74,7 +74,7 @@ impl fmt::Display for Chain {
 }
 
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum Species {
     Human,
     Mouse,
